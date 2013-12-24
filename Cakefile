@@ -1,4 +1,5 @@
 {spawn, exec} = require 'child_process'
+fs = require 'fs'
 log = console.log
 
 task 'build', ->
