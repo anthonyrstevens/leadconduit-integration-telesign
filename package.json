@@ -3,7 +3,7 @@
   "description": "LeadConduit integration with BriteVerify",
   "author": "Alex Wolfe <alex@activeprospect.com>",
   "version": "0.0.1",
-  "main": "briteverify.js",
+  "main": "index.js",
   "licenses": [{
     "type": "ActiveProspect, Inc. All Rights Reserved",
     "url": "http://www.activeprospect.com/integration_license"
