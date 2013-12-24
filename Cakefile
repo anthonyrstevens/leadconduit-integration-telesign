@@ -2,7 +2,11 @@
 log = console.log
 
 task 'build', ->
-  run './node_modules/coffee-script/bin/coffee -o lib -c src'
+  coffeePath = './node_modules/coffee-script/bin/coffee'
+  if fs.existsSync(coffeePath)
+    run "#{coffeePath} -o lib -c src"
+  else
+    console.log('> skipping build because coffee-script is not installed')
 
 task 'test', ->
   run './node_modules/.bin/mocha spec/* --compilers coffee:coffee-script --reporter spec --colors'
