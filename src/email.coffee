@@ -7,7 +7,7 @@ baseUrl = 'https://bpi.briteverify.com/emails.json'
 
 request = (vars) ->
   {
-  url: "#{baseUrl}?address=#{vars.email}&apikey=#{vars.apikey}",
+  url: "#{baseUrl}?address=#{vars.lead.email}&apikey=#{vars.briteverify.apikey}",
   method: 'GET',
   headers:
     {
@@ -17,8 +17,8 @@ request = (vars) ->
 
 request.variables = ->
   [
-    { name: 'apikey', type: 'string', required: true, description: 'BriteVerify API Key' },
-    { name: 'email', type: 'string', required: true, description: 'Email address' }
+    { name: 'briteverify.apikey', type: 'string', required: true, description: 'BriteVerify API Key' },
+    { name: 'lead.email', type: 'string', required: true, description: 'Email address' }
   ]
 
 
@@ -36,15 +36,15 @@ response = (vars, req, res) ->
 
 response.variables = ->
   [
-    { name: 'address', type: 'string', description: 'the email that was passed' },
-    { name: 'account', type: 'string', description: 'the inbox or account parsed from the email' },
-    { name: 'domain', type: 'string', description: 'the domain parsed from the email' },
-    { name: 'status', type: 'string', description: 'the status of the given email address' },
-    { name: 'error_code', type: 'number', description: 'a code representation of error' },
-    { name: 'error', type: 'string', description: 'the error message if the email is invalid' },
-    { name: 'disposable', type: 'boolean', description: 'is the email a temporary or "disposable" email address?' },
-    { name: 'role_address', type: 'boolean', description: 'is the email aside for a function rather than a person (postmaster, sales, admin, info, etc)?' },
-    { name: 'duration', type: 'number', description: 'the time it took to process your request' }
+    { name: 'briteverify.email.address', type: 'string', description: 'the email that was passed' },
+    { name: 'briteverify.email.account', type: 'string', description: 'the inbox or account parsed from the email' },
+    { name: 'briteverify.email.domain', type: 'string', description: 'the domain parsed from the email' },
+    { name: 'briteverify.email.status', type: 'string', description: 'the status of the given email address' },
+    { name: 'briteverify.email.error_code', type: 'number', description: 'a code representation of error' },
+    { name: 'briteverify.email.error', type: 'string', description: 'the error message if the email is invalid' },
+    { name: 'briteverify.email.disposable', type: 'boolean', description: 'is the email a temporary or "disposable" email address?' },
+    { name: 'briteverify.email.role_address', type: 'boolean', description: 'is the email aside for a function rather than a person (postmaster, sales, admin, info, etc)?' },
+    { name: 'briteverify.email.duration', type: 'number', description: 'the time it took to process your request' }
   ]
 
 
@@ -53,7 +53,6 @@ response.variables = ->
 #
 
 module.exports =
-  type: 'outbound',
   request: request,
   response: response
 

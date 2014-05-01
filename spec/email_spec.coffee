@@ -5,7 +5,7 @@ describe 'Email Request', ->
   request = null
 
   beforeEach ->
-    request = integration.request(email: 'foo@bar.com', apikey: '1234')
+    request = integration.request(lead: { email: 'foo@bar.com'}, briteverify: { apikey: '1234'})
 
   it 'should have url', ->
     assert.equal 'https://bpi.briteverify.com/emails.json?address=foo@bar.com&apikey=1234', request.url
