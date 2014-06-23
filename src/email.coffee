@@ -6,14 +6,10 @@ baseUrl = 'https://bpi.briteverify.com/emails.json'
 #
 
 request = (vars) ->
-  {
   url: "#{baseUrl}?address=#{vars.lead.email}&apikey=#{vars.briteverify.apikey}",
   method: 'GET',
   headers:
-    {
     Accepts: 'application/json'
-    }
-  }
 
 request.variables = ->
   [
