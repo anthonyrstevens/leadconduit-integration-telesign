@@ -40,7 +40,9 @@ request.variables = ->
 response = (vars, req, res) ->
   if res.status == 200
     event = JSON.parse(res.body)
+    # this should only be a success if the status.code is 300 or 301.  if 301 it should have a partial flag
     event.outcome = 'success'
+    # clean up these events, use underscore_strings and make more usefriendly
   else
     event = { outcome: 'error', reason: "Telesign error (#{res.status})" }
 

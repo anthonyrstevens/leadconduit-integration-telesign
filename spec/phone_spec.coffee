@@ -10,6 +10,8 @@ describe 'Phone Request', ->
     tk.freeze(d)
     request = integration.request(lead: { phone1: '7732658399' }, telesign: { encoded_apikey: 'vW4G4ZmvGKby2dlowcdHxhkwy5RqwC+mfV9eVk3p', customer_id: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE' })
 
+  # make an afterEach to release tk.freeze
+  
   it 'should have url', ->
     assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&signature=TSA AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE:IqV/JHSu25rLtf4K4TxiD5Bt3RE='
 
@@ -37,6 +39,8 @@ describe 'Phone Response', ->
         code: 300
         description: "Transaction successfully completed"
       errors: []
+      #clean these up so they're user friendly
+      #like phone_tye: "fixed_line" instead of substatuses
       phone_type:
         code: "1"
         description: "FIXED_LINE"
