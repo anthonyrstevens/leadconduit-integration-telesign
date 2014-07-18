@@ -13,7 +13,7 @@ describe 'Phone Request', ->
   it 'should be get', ->
     assert.equal 'GET', request.method
 
-describe 'Email Response', ->
+describe 'Phone Response', ->
   it 'should parse JSON body', ->
     vars = {}
     req = {}
