@@ -1,14 +1,17 @@
 assert = require('chai').assert
 integration = require('../src/phone')
+tk = require('timekeeper')
 
 describe 'Phone Request', ->
   request = null
 
   beforeEach ->
+    d = new Date('Thu, 10 Jul 2014 17:45:32 +0000')
+    tk.freeze(d)
     request = integration.request(lead: { phone1: '7732658399' }, telesign: { encoded_apikey: 'vW4G4ZmvGKby2dlowcdHxhkwy5RqwC+mfV9eVk3p', customer_id: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE' })
 
   it 'should have url', ->
-    assert.include request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&signature=TSA AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
+    assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&signature=TSA AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE:IqV/JHSu25rLtf4K4TxiD5Bt3RE='
 
   it 'should be get', ->
     assert.equal 'GET', request.method
