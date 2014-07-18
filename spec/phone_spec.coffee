@@ -99,9 +99,7 @@ describe 'Phone Response', ->
             }
             """
     expected =
-      telesign:
-        phone:
-          outcome: 'error'
-          reason: 'Telesign error (400)'
+      outcome: 'error'
+      reason: 'Telesign error (400)'
     response = integration.response(vars, req, res)
     assert.deepEqual expected, response
