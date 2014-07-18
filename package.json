@@ -1,16 +1,18 @@
 {
-  "name": "leadconduit-briteverify",
-  "description": "LeadConduit integration with BriteVerify",
-  "author": "Alex Wolfe <alex@activeprospect.com>",
+  "name": "leadconduit-telesign",
+  "description": "LeadConduit integration with Telesign",
+  "author": "Zalary Young <zalary@activeprospect.com>",
   "version": "0.0.7",
   "main": "index.js",
-  "licenses": [{
-    "type": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International",
-    "url": "http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
-  }],
+  "licenses": [
+    {
+      "type": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International",
+      "url": "http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/activeprospect/leadconduit-integration-briteverify.git"
+    "url": "https://github.com/activeprospect/leadconduit-integration-telesign.git"
   },
   "engines": {
     "node": ">=0.8.1"
@@ -20,6 +22,7 @@
     "prepublish": "cake build"
   },
   "dependencies": {
+    "moment": "^2.7.0"
   },
   "devDependencies": {
     "coffee-script": ">= 1.7.0",
