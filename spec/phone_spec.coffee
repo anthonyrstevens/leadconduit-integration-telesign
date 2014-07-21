@@ -12,13 +12,12 @@ describe 'Phone Request', ->
     tk.reset(d)
 
   it 'should have url', ->
-    assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&signature=TSA AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE:IqV/JHSu25rLtf4K4TxiD5Bt3RE='
-
+    assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&x-ts-date=Thu, 10 Jul 2014 17:45:32 +0000&x-ts-authorization=TSA AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE:IqV/JHSu25rLtf4K4TxiD5Bt3RE='
   it 'should be get', ->
     assert.equal 'GET', request.method
 
 describe 'Phone Response', ->
-  it 'should parse JSON body', ->
+  it 'should parse JSON body and return success on status 300', ->
     vars = {}
     req = {}
     res =
