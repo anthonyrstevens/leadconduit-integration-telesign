@@ -38,25 +38,17 @@ describe 'Phone Response', ->
         subscriber_status: "Active"
         device_status: "Unavailable"
         roaming: "Unavailable"
-        roaming_country: null
-        roaming_country_iso2: null
+        roaming_country_code: null
         location:
           city: "Chicago"
           state: "IL"
           zip: "60611"
           metro_code: "1600"
           county: "Cook"
-          country:
-            name: "United States"
-            iso2: "US"
-            iso3: "USA"
-          coordinates:
-            latitude: 41.87829
-            longitude: -87.71248
-          time_zone:
-            name: "America/Chicago"
-            utc_offset_min: "-6"
-            utc_offset_max: "-6"
+          country_code: "US"
+          latitude: 41.87829
+          longitude: -87.71248
+          time_zone: "America/Chicago"
         numbering:
           original:
             complete_phone_number: "17732658399"
