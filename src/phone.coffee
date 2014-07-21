@@ -1,5 +1,6 @@
 crypto = require('crypto');
 moment = require('moment');
+_s = require('underscore.string');
 
 baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
 
