@@ -28,65 +28,59 @@ describe 'Phone Response', ->
         {"reference_id": "0147216155F00D04E40012C600017C63", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-07-10T17:45:33.140531Z", "code": 300, "description": "Transaction successfully completed"}, "errors": [], "phone_type": {"code": "1", "description": "FIXED_LINE"}, "live": {"subscriber_status": "ACTIVE", "device_status": "UNAVAILABLE", "roaming": "UNAVAILABLE", "roaming_country": null, "roaming_country_iso2": null}, "location": {"city": "CHICAGO", "state": "IL", "zip": "60611", "metro_code": "1600", "county": "COOK", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 41.87829, "longitude": -87.71248}, "time_zone": {"name": "America/Chicago", "utc_offset_min": "-6", "utc_offset_max": "-6"}}, "numbering": {"original": {"complete_phone_number": "17732658399", "country_code": "1", "phone_number": "7732658399"}, "cleansing": {"call": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "AT&T - PSTN"}}
       '
     expected =
-      outcome: "success"
-      reference_id: "0147216155F00D04E40012C600017C63"
-      resource_uri: null
-      sub_resource: "live"
-      status:
-        updated_on: "2014-07-10T17:45:33.140531Z"
-        code: 300
-        description: "Transaction successfully completed"
-      errors: []
-      #clean these up so they're user friendly
-      #like phone_tye: "fixed_line" instead of substatuses
-      phone_type:
-        code: "1"
-        description: "FIXED_LINE"
       live:
-        subscriber_status: "ACTIVE"
-        device_status: "UNAVAILABLE"
-        roaming: "UNAVAILABLE"
+        outcome: "success"
+        reference_id: "0147216155F00D04E40012C600017C63"
+        errors: []
+        phone_type: "fixed_line"
+        risk: "low"
+        carrier: "AT&T - PSTN"
+        subscriber_status: "Active"
+        device_status: "Unavailable"
+        roaming: "Unavailable"
         roaming_country: null
         roaming_country_iso2: null
-      location:
-        city: "CHICAGO"
-        state: "IL"
-        zip: "60611"
-        metro_code: "1600"
-        county: "COOK"
-        country:
-          name: "United States"
-          iso2: "US"
-          iso3: "USA"
-        coordinates:
-          latitude: 41.87829
-          longitude: -87.71248
-        time_zone:
-          name: "America/Chicago"
-          utc_offset_min: "-6"
-          utc_offset_max: "-6"
-      numbering:
-        original:
-          complete_phone_number: "17732658399"
-          country_code: "1"
-          phone_number: "7732658399"
-        cleansing:
-          call:
+        location:
+          city: "Chicago"
+          state: "IL"
+          zip: "60611"
+          metro_code: "1600"
+          county: "Cook"
+          country:
+            name: "United States"
+            iso2: "US"
+            iso3: "USA"
+          coordinates:
+            latitude: 41.87829
+            longitude: -87.71248
+          time_zone:
+            name: "America/Chicago"
+            utc_offset_min: "-6"
+            utc_offset_max: "-6"
+        numbering:
+          original:
+            complete_phone_number: "17732658399"
             country_code: "1"
             phone_number: "7732658399"
-            cleansed_code: 100
-            min_length: 10
-            max_length: 10
-          sms:
-            country_code: "1"
-            phone_number: "7732658399"
-            cleansed_code: 100
-            min_length: 10
-            max_length: 10
-      carrier:
-        name: "AT&T - PSTN"
+          cleansing:
+            call:
+              country_code: "1"
+              phone_number: "7732658399"
+              cleansed_code: 100
+              min_length: 10
+              max_length: 10
+            sms:
+              country_code: "1"
+              phone_number: "7732658399"
+              cleansed_code: 100
+              min_length: 10
+              max_length: 10
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
+
+  # test partial response
+
+  # test 200 but failure
 
   it 'should return error outcome on non-200 response status', ->
     vars = {}
@@ -102,7 +96,8 @@ describe 'Phone Response', ->
             }
             """
     expected =
-      outcome: 'error'
-      reason: 'Telesign error (400)'
+      live:
+        outcome: 'error'
+        reason: 'Telesign error (400)'
     response = integration.response(vars, req, res)
-    assert.deepEqual expected, response
+    assert.deepEqual response, expected
