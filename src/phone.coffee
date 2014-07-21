@@ -68,6 +68,7 @@ response = (vars, req, res) ->
     event.location.city = _s.capitalize(event.location.city.toLowerCase())
     event.location.county = _s.capitalize(event.location.county.toLowerCase())
     event.location.country_code = event.location.country.iso2
+    event.location.postal_code = event.location.zip
     event.location.latitude = event.location.coordinates.latitude
     event.location.longitude = event.location.coordinates.longitude
     event.location.time_zone = event.location.time_zone.name
@@ -77,6 +78,7 @@ response = (vars, req, res) ->
     delete event['live'];
     delete event.location['coordinates']
     delete event.location['country']
+    delete event.location['zip']
 
   else
     event = { outcome: 'error', reason: "Telesign error (#{res.status})" }
@@ -97,13 +99,13 @@ response.variables = ->
     { name: 'live.roaming_country_code', type: 'string', description: 'The ISO 3166-1 2-letter Country Code in which the mobile device is roaming.'},
     { name: 'live.location.city', type: 'string', description: 'A string specifying the name of the city associated with the phone number.'},
     { name: 'live.location.state', type: 'string', description: 'The 2-letter State Code of the state (province, district, or territory) associated with the phone number (North America only).'},
-    { name: 'live.location.zip', type: 'string', description: 'The 5-digit United States Postal Service ZIP Code associated with the phone number (U.S. only).'},
+    { name: 'live.location.postal_code', type: 'string', description: 'The 5-digit United States Postal Service ZIP Code associated with the phone number (U.S. only).'},
     { name: 'live.location.metro_code', type: 'string', description: 'A 4-digit string indicating the Primary Metropolitan Statistical Area (PMSA) Code for the location associated with the phone number (U.S. only). PMSA Codes are governed by the US Census Bureau.'},
     { name: 'live.location.county', type: 'string', description: 'A string specifying the name of the County (or Parish) associated with the phone number (U.S. only).'},
     { name: 'live.location.country_code', type: 'string', description: 'The ISO 3166-1 2-letter Country Code associated with phone number.'},
     { name: 'live.location.latitude', type: 'string', description: 'A value indicating the number of degrees of latitude of the location associated with the phone number, expressed in seven decimal digits, with five decimal places.'},
     { name: 'live.location.longitude', type: 'string', description: 'A value indicating the number of degrees of longitude of the location associated with the phone number, expressed in eight decimal digits, with five decimal places.'},
-    { name: 'live.location.timezone', type: 'string', description: 'A string identifying the Time Zone Name (TZ) associated with the phone number (U.S. only).'},
+    { name: 'live.location.time_zone', type: 'string', description: 'A string identifying the Time Zone Name (TZ) associated with the phone number (U.S. only).'},
     { name: 'live.numbering.original.complete_phone_number', type: 'string', description: 'The Base Phone Number prefixed with the Country Dialing Code. This forms the Subresource Identifier part of the PhoneID Live web service URI.'},
     { name: 'live.numbering.original.country_code', type: 'number', description: 'A 1, 2, or 3-digit number representing the Country Dialing Code.'},
     { name: 'live.numbering.original.phone_number', type: 'number', description: 'The Base Phone Number. This is simply the phone number without the Country Dialing Code.'},

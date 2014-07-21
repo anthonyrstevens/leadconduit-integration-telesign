@@ -42,7 +42,7 @@ describe 'Phone Response', ->
         location:
           city: "Chicago"
           state: "IL"
-          zip: "60611"
+          postal_code: "60611"
           metro_code: "1600"
           county: "Cook"
           country_code: "US"
