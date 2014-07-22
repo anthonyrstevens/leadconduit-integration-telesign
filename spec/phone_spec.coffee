@@ -16,7 +16,7 @@ describe 'Phone Request', ->
   it 'should be get', ->
     assert.equal 'GET', request.method
 
-describe 'Phone Full Response', ->
+describe 'Phone Response', ->
   it 'should parse JSON body and return success on status 300', ->
     vars = {}
     req = {}
@@ -70,7 +70,6 @@ describe 'Phone Full Response', ->
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
-  describe 'Phone Partial Response', ->
   it 'should parse JSON body and return partial success on status 301', ->
     vars = {}
     req = {}
@@ -128,10 +127,6 @@ describe 'Phone Full Response', ->
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
-  # test 200 but failure
-  # {"status": {"updated_on": "2014-05-15T18:33:15.588855Z", "code": 501, "description": "Not authorized"}, "signature_string": "GET\n\n\nx-ts-date:Thu, 15 May 2014 18:33:15 +0000\n/v1/phoneid/live/16503936308", "errors": [{"code": -30006, "description": "Invalid Signature."}]}
-
-  describe 'Phone Error Response', ->
   it 'should parse JSON body and return error on status 501', ->
     vars = {}
     req = {}
@@ -140,7 +135,7 @@ describe 'Phone Full Response', ->
       headers:
         'Content-Type': 'application/json'
       body: """
-             {"status": {"updated_on": "2014-05-15T18:33:15.588855Z", "code": 501, "description": "Not authorized"}, "signature_string": "GET x-ts-date:Thu, 15 May 2014 18:33:15 +0000 /v1/phoneid/live/16503936308", "errors": [{"code": -30006, "description": "Invalid Signature."}]}
+             {"status": {"updated_on": "2014-05-15T18:33:15.588855Z", "code": 501, "description": "Not authorized"}, "signature_string": "GET\\n\\n\\nx-ts-date:Thu, 15 May 2014 18:33:15 +0000\\n/v1/phoneid/live/16503936308", "errors": [{"code": -30006, "description": "Invalid Signature."}]}
           """
     expected =
       live:

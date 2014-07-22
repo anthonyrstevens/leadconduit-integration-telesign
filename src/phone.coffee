@@ -8,8 +8,6 @@ baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
 # Request Function -------------------------------------------------------
 #
 
-# Z questions:  date and duration?
-
 request = (vars) ->
   d = Date.now()
   rfc822Date = moment(d).format('ddd, DD MMM YYYY HH:mm:ss ZZ')
@@ -39,12 +37,16 @@ request.variables = ->
 #
 
 response = (vars, req, res) ->
+
+
+
   if res.status == 200
     event = JSON.parse(res.body)
-    # this should only be a success if the status.code is 300 or 301.  if 301 it should have a partial flag
+    # should only be a success if the status.code is 300 or 301
     if event.status.code == 300
       event.outcome = 'success'
     else if event.status.code == 301
+      #301 should have a partial flag
       event.outcome = 'success'
       event.partial = true
     else
