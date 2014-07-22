@@ -50,42 +50,46 @@ response = (vars, req, res) ->
     else
       event.outcome = 'error'
       event.reason = event.status.code + ' - ' + event.status.description
-    phone_code = event.phone_type.code
-    console.log(phone_code)
-    switch (phone_code)
-      when "1" then event.risk = 'low'; break;
-      when "2", "10" then event.risk = 'medium-low'; break;
-      when "3", "11", "20" then event.risk = 'medium-high'; break;
-      when "4", "5", "6", "7", "8", "9" then event.risk = 'high'; break;
-      else event.risk = 'unknown'
+      delete event['status'];
+      delete event['reason'];
+      delete event['signature_string'];
 
-    event.carrier = event.carrier.name
-    event.phone_type = _s.humanize(event.phone_type.description)
-    if event.live
-      event.subscriber_status = _s.capitalize(event.live.subscriber_status.toLowerCase())
-      event.device_status = _s.capitalize(event.live.device_status.toLowerCase())
-      event.roaming = _s.capitalize(event.live.roaming.toLowerCase())
-      event.roaming_country_code = event.live.roaming_country_iso2
-    else
-      event.subscriber_status = null
-      event.device_status = null
-      event.roaming = null
-      event.roaming_country_code = null
+    if event.outcome == 'success'
+      phone_code = event.phone_type.code
+      switch (phone_code)
+        when "1" then event.risk = 'low'; break;
+        when "2", "10" then event.risk = 'medium-low'; break;
+        when "3", "11", "20" then event.risk = 'medium-high'; break;
+        when "4", "5", "6", "7", "8", "9" then event.risk = 'high'; break;
+        else event.risk = 'unknown'
 
-    event.location.city = _s.capitalize(event.location.city.toLowerCase())
-    event.location.county = _s.capitalize(event.location.county.toLowerCase())
-    event.location.country_code = event.location.country.iso2
-    event.location.postal_code = event.location.zip
-    event.location.latitude = event.location.coordinates.latitude
-    event.location.longitude = event.location.coordinates.longitude
-    event.location.time_zone = event.location.time_zone.name
-    delete event['resource_uri'];
-    delete event['sub_resource'];
-    delete event['status'];
-    delete event['live'];
-    delete event.location['coordinates']
-    delete event.location['country']
-    delete event.location['zip']
+      event.carrier = event.carrier.name
+      event.phone_type = _s.humanize(event.phone_type.description)
+      if event.live
+        event.subscriber_status = _s.capitalize(event.live.subscriber_status.toLowerCase())
+        event.device_status = _s.capitalize(event.live.device_status.toLowerCase())
+        event.roaming = _s.capitalize(event.live.roaming.toLowerCase())
+        event.roaming_country_code = event.live.roaming_country_iso2
+      else
+        event.subscriber_status = null
+        event.device_status = null
+        event.roaming = null
+        event.roaming_country_code = null
+
+      event.location.city = _s.capitalize(event.location.city.toLowerCase())
+      event.location.county = _s.capitalize(event.location.county.toLowerCase())
+      event.location.country_code = event.location.country.iso2
+      event.location.postal_code = event.location.zip
+      event.location.latitude = event.location.coordinates.latitude
+      event.location.longitude = event.location.coordinates.longitude
+      event.location.time_zone = event.location.time_zone.name
+      delete event['resource_uri'];
+      delete event['sub_resource'];
+      delete event['status'];
+      delete event['live'];
+      delete event.location['coordinates']
+      delete event.location['country']
+      delete event.location['zip']
 
   else
     event = { outcome: 'error', reason: "Telesign error (#{res.status})" }

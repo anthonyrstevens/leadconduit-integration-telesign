@@ -70,9 +70,8 @@ describe 'Phone Full Response', ->
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
-  # test partial response
   describe 'Phone Partial Response', ->
-  it 'should parse JSON body and return success on status 301', ->
+  it 'should parse JSON body and return partial success on status 301', ->
     vars = {}
     req = {}
     res =
@@ -130,6 +129,28 @@ describe 'Phone Full Response', ->
     assert.deepEqual response, expected
 
   # test 200 but failure
+  # {"status": {"updated_on": "2014-05-15T18:33:15.588855Z", "code": 501, "description": "Not authorized"}, "signature_string": "GET\n\n\nx-ts-date:Thu, 15 May 2014 18:33:15 +0000\n/v1/phoneid/live/16503936308", "errors": [{"code": -30006, "description": "Invalid Signature."}]}
+
+  describe 'Phone Error Response', ->
+  it 'should parse JSON body and return error on status 501', ->
+    vars = {}
+    req = {}
+    res =
+      status: 200,
+      headers:
+        'Content-Type': 'application/json'
+      body: """
+             {"status": {"updated_on": "2014-05-15T18:33:15.588855Z", "code": 501, "description": "Not authorized"}, "signature_string": "GET x-ts-date:Thu, 15 May 2014 18:33:15 +0000 /v1/phoneid/live/16503936308", "errors": [{"code": -30006, "description": "Invalid Signature."}]}
+          """
+    expected =
+      live:
+        outcome: "error"
+        errors: [
+          code: -30006
+          description: "Invalid Signature."
+        ]
+    response = integration.response(vars, req, res)
+    assert.deepEqual response, expected
 
   it 'should return error outcome on non-200 response status', ->
     vars = {}
