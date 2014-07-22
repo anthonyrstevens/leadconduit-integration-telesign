@@ -60,11 +60,18 @@ response = (vars, req, res) ->
       else event.risk = 'unknown'
 
     event.carrier = event.carrier.name
-    event.phone_type = event.phone_type.description.toLowerCase()
-    event.subscriber_status = _s.capitalize(event.live.subscriber_status.toLowerCase())
-    event.device_status = _s.capitalize(event.live.device_status.toLowerCase())
-    event.roaming = _s.capitalize(event.live.roaming.toLowerCase())
-    event.roaming_country_code = event.live.roaming_country_iso2
+    event.phone_type = _s.humanize(event.phone_type.description)
+    if event.live
+      event.subscriber_status = _s.capitalize(event.live.subscriber_status.toLowerCase())
+      event.device_status = _s.capitalize(event.live.device_status.toLowerCase())
+      event.roaming = _s.capitalize(event.live.roaming.toLowerCase())
+      event.roaming_country_code = event.live.roaming_country_iso2
+    else
+      event.subscriber_status = null
+      event.device_status = null
+      event.roaming = null
+      event.roaming_country_code = null
+
     event.location.city = _s.capitalize(event.location.city.toLowerCase())
     event.location.county = _s.capitalize(event.location.county.toLowerCase())
     event.location.country_code = event.location.country.iso2
