@@ -8,7 +8,7 @@ describe 'Phone Request', ->
   beforeEach ->
     d = new Date('Thu, 10 Jul 2014 17:45:32 +0000')
     tk.freeze(d)
-    request = integration.request(lead: { phone1: '7732658399' }, telesign: { encoded_apikey: 'vW4G4ZmvGKby2dlowcdHxhkwy5RqwC+mfV9eVk3p', customer_id: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE' })
+    request = integration.request(lead: { phone_1: '7732658399' }, telesign: { encoded_apikey: 'vW4G4ZmvGKby2dlowcdHxhkwy5RqwC+mfV9eVk3p', customer_id: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE' })
     tk.reset(d)
 
   it 'should have url', ->

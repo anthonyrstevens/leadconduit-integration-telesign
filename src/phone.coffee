@@ -13,12 +13,12 @@ request = (vars) ->
   rfc822Date = moment(d).format('ddd, DD MMM YYYY HH:mm:ss ZZ')
   CanonicalizedTsHeaders = 'x-ts-date:' + rfc822Date + '\n'
   CanonicalizedPOSTVariables = ''
-  CanonicalizedResource = "/v1/phoneid/live/1#{vars.lead.phone1}"
+  CanonicalizedResource = "/v1/phoneid/live/1#{vars.lead.phone_1}"
   apiKeyDecoded = new Buffer("#{vars.telesign.encoded_apikey}", 'base64')
   stringToSign = String("GET\n\n\n" + CanonicalizedTsHeaders + CanonicalizedResource);
   hash = crypto.createHmac('sha1', apiKeyDecoded).update(stringToSign, 'utf-8').digest('base64')
   signature = "TSA " + "#{vars.telesign.customer_id}" + ":" + hash
-  url: "#{baseUrl}1#{vars.lead.phone1}?ucid=LEAD&x-ts-date=#{rfc822Date}&x-ts-authorization=#{signature}",
+  url: "#{baseUrl}1#{vars.lead.phone_1}?ucid=LEAD&x-ts-date=#{rfc822Date}&x-ts-authorization=#{signature}",
   method: 'GET',
   headers:
     Accepts: 'application/json'
