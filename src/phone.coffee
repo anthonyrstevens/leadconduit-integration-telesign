@@ -27,7 +27,7 @@ request.variables = ->
   [
     { name: 'telesign.customer_id', type: 'string', required: true, description: 'Telesign Customer Id' },
     { name: 'telesign.encoded_apikey', type: 'string', required: true, description: 'Telesign base64-encoded API Key' },
-    { name: 'lead.phone1', type: 'string', required: true, description: 'Phone Number' }
+    { name: 'lead.phone_1', type: 'string', required: true, description: 'Phone Number' }
   ]
 
 
