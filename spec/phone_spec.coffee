@@ -12,7 +12,7 @@ describe 'Phone Request', ->
     tk.reset(d)
 
   it 'should have url', ->
-    assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&x-ts-date=Thu, 10 Jul 2014 17:45:32 +0000&x-ts-authorization=TSA AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE:IqV/JHSu25rLtf4K4TxiD5Bt3RE='
+    assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&x-ts-date=Thu%2C%2010%20Jul%202014%2017%3A45%3A32%20%2B0000&x-ts-authorization=TSA%20AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%3AIqV%2FJHSu25rLtf4K4TxiD5Bt3RE%3D'
   it 'should be get', ->
     assert.equal 'GET', request.method
 

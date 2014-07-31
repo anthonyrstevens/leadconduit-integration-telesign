@@ -1,5 +1,6 @@
 crypto = require('crypto');
 moment = require('moment');
+querystring = require('querystring')
 _s = require('underscore.string');
 
 baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
@@ -18,7 +19,13 @@ request = (vars) ->
   stringToSign = String("GET\n\n\n" + CanonicalizedTsHeaders + CanonicalizedResource);
   hash = crypto.createHmac('sha1', apiKeyDecoded).update(stringToSign, 'utf-8').digest('base64')
   signature = "TSA " + "#{vars.telesign.customer_id}" + ":" + hash
-  url: "#{baseUrl}1#{vars.lead.phone_1}?ucid=LEAD&x-ts-date=#{rfc822Date}&x-ts-authorization=#{signature}",
+
+  query = querystring.encode
+    'ucid': 'LEAD'
+    'x-ts-date': rfc822Date
+    'x-ts-authorization': signature
+
+  url: "#{baseUrl}1#{vars.lead.phone_1}?#{query}",
   method: 'GET',
   headers:
     Accepts: 'application/json'
