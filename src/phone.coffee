@@ -12,13 +12,13 @@ baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
 request = (vars) ->
   d = Date.now()
   rfc822Date = moment(d).format('ddd, DD MMM YYYY HH:mm:ss ZZ')
-  CanonicalizedTsHeaders = 'x-ts-date:' + rfc822Date + '\n'
+  CanonicalizedTsHeaders = "x-ts-date:#{rfc822Date}\n"
   CanonicalizedPOSTVariables = ''
   CanonicalizedResource = "/v1/phoneid/live/1#{vars.lead.phone_1}"
-  apiKeyDecoded = new Buffer("#{vars.telesign.encoded_apikey}", 'base64')
-  stringToSign = String("GET\n\n\n" + CanonicalizedTsHeaders + CanonicalizedResource);
+  apiKeyDecoded = new Buffer(vars.telesign.encoded_apikey, 'base64')
+  stringToSign = String("GET\n\n\n" + CanonicalizedTsHeaders + CanonicalizedResource)
   hash = crypto.createHmac('sha1', apiKeyDecoded).update(stringToSign, 'utf-8').digest('base64')
-  signature = "TSA " + "#{vars.telesign.customer_id}" + ":" + hash
+  signature = "TSA #{vars.telesign.customer_id}:#{hash}"
 
   query = querystring.encode
     'ucid': 'LEAD'
@@ -58,19 +58,19 @@ response = (vars, req, res) ->
       event.partial = true
     else
       event.outcome = 'error'
-      event.reason = event.status.code + ' - ' + event.status.description
-      delete event['status'];
-      delete event['reason'];
-      delete event['signature_string'];
+      event.reason = "#{event.status.code} #{event.status.description}"
+      delete event.status
+      delete event.reason
+      delete event.signature_string
 
     if event.outcome == 'success'
-      phone_code = event.phone_type.code
-      switch (phone_code)
-        when "1" then event.risk = 'low'; break;
-        when "2", "10" then event.risk = 'medium-low'; break;
-        when "3", "11", "20" then event.risk = 'medium-high'; break;
-        when "4", "5", "6", "7", "8", "9" then event.risk = 'high'; break;
-        else event.risk = 'unknown'
+      event.risk =
+      switch (event.phone_type.code)
+        when '1' then 'low'
+        when '2', '10' then 'medium-low'
+        when '3', '11', '20' then 'medium-high'
+        when '4', '5', '6', '7', '8', '9' then 'high'
+        else 'unknown'
 
       event.carrier = event.carrier.name
       event.phone_type = _s.humanize(event.phone_type.description)
@@ -94,17 +94,16 @@ response = (vars, req, res) ->
       event.location.latitude = event.location.coordinates.latitude
       event.location.longitude = event.location.coordinates.longitude
       event.location.time_zone = event.location.time_zone.name
-      delete event['resource_uri'];
-      delete event['sub_resource'];
-      delete event['status'];
-      delete event['live'];
-      delete event.location['coordinates']
-      delete event.location['country']
-      delete event.location['zip']
+      delete event.resource_uri
+      delete event.sub_resource
+      delete event.status
+      delete event.live
+      delete event.location.coordinates
+      delete event.location.country
+      delete event.location.zip
 
   else
     event = { outcome: 'error', reason: "Telesign error (#{res.status})" }
-    live: event
 
   live: event
 
