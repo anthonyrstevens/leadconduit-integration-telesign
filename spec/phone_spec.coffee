@@ -127,6 +127,63 @@ describe 'Phone Response', ->
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
+  it 'should correctly parse null values for live and location', ->
+    vars = {}
+    req = {}
+    res =
+      status: 200,
+      headers:
+        'Content-Type': 'application/json'
+      body: '
+                  {"reference_id": "01466D0F94F30E02E400124900017E76", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-06-05T17:24:36.587351Z", "code": 301, "description": "Transaction partially completed"}, "errors": [{"code": -60001, "description": "PhoneID Live Data Not Found"}], "phone_type": {"code": "2", "description": "MOBILE"}, "live": null, "location": {"city": null, "state": null, "zip": null, "metro_code": null, "county": null, "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 37.34728, "longitude": -108.58756}, "time_zone": {"name": "America/Denver", "utc_offset_min": "-7", "utc_offset_max": "-7"}}, "numbering": {"original": {"complete_phone_number": "19707396346", "country_code": "1", "phone_number": "9707396346"}, "cleansing": {"call": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "Verizon Wireless"}}
+                  '
+    expected =
+      live:
+        outcome: "success"
+        partial: true
+        reference_id: "01466D0F94F30E02E400124900017E76"
+        errors: [
+          code: -60001
+          description: "PhoneID Live Data Not Found"
+        ]
+        phone_type: "Mobile"
+        risk: "medium-low"
+        carrier: "Verizon Wireless"
+        subscriber_status: null
+        device_status: null
+        roaming: null
+        roaming_country_code: null
+        location:
+          latitude: 37.34728
+          longitude: -108.58756
+          city: null
+          state: null
+          postal_code: null
+          metro_code: null
+          county: null
+          country_code: "US"
+          time_zone: "America/Denver"
+        numbering:
+          original:
+            complete_phone_number: "19707396346"
+            country_code: "1"
+            phone_number: "9707396346"
+          cleansing:
+            call:
+              country_code: "1"
+              phone_number: "9707396346"
+              cleansed_code: 100
+              min_length: 10
+              max_length: 10
+            sms:
+              country_code: "1"
+              phone_number: "9707396346"
+              cleansed_code: 100
+              min_length: 10
+              max_length: 10
+    response = integration.response(vars, req, res)
+    assert.deepEqual response, expected
+
   it 'should parse JSON body and return error on status 501', ->
     vars = {}
     req = {}
