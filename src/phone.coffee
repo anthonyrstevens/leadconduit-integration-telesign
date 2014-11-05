@@ -10,19 +10,22 @@ baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
 #
 
 request = (vars) ->
-  d = Date.now()
-  rfc822Date = moment(d).format('ddd, DD MMM YYYY HH:mm:ss ZZ')
-  CanonicalizedTsHeaders = "x-ts-date:#{rfc822Date}\n"
-  CanonicalizedPOSTVariables = ''
-  CanonicalizedResource = "/v1/phoneid/live/1#{vars.lead.phone_1}"
-  apiKeyDecoded = new Buffer(vars.telesign.encoded_apikey, 'base64')
-  stringToSign = String("GET\n\n\n" + CanonicalizedTsHeaders + CanonicalizedResource)
-  hash = crypto.createHmac('sha1', apiKeyDecoded).update(stringToSign, 'utf-8').digest('base64')
+
+  # Use the API key specified as an environment variable
+  apiKey = new Buffer(process.env.TELESIGN_ENCODED_API_KEY ? vars.telesign.encoded_apikey, 'base64')
+
+  # Generate the request signature
+  date = moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
+  headers = "x-ts-date:#{date}\n"
+  resource = "/v1/phoneid/live/1#{vars.lead.phone_1}"
+  stringToSign = "GET\n\n\n#{headers}#{resource}"
+  hash = crypto.createHmac('sha1', apiKey).update(stringToSign, 'utf-8').digest('base64')
   signature = "TSA #{vars.telesign.customer_id}:#{hash}"
 
+  # Build the query string
   query = querystring.encode
     'ucid': 'LEAD'
-    'x-ts-date': rfc822Date
+    'x-ts-date': date
     'x-ts-authorization': signature
 
   url: "#{baseUrl}1#{vars.lead.phone_1}?#{query}",
@@ -32,8 +35,8 @@ request = (vars) ->
 
 request.variables = ->
   [
-    { name: 'telesign.customer_id', type: 'string', required: true, description: 'Telesign Customer Id' },
-    { name: 'telesign.encoded_apikey', type: 'string', required: true, description: 'Telesign base64-encoded API Key' },
+    { name: 'telesign.customer_id', type: 'string', required: true, description: 'TeleSign Customer ID' },
+    { name: 'telesign.encoded_apikey', type: 'string', required: false, description: 'TeleSign base64-encoded API Key' },
     { name: 'lead.phone_1', type: 'string', required: true, description: 'Phone Number' }
   ]
 
@@ -65,7 +68,7 @@ response = (vars, req, res) ->
 
     if event.outcome == 'success'
       event.risk =
-      switch (event.phone_type.code)
+      switch event.phone_type.code
         when '1' then 'low'
         when '2', '10' then 'medium-low'
         when '3', '11', '20' then 'medium-high'
@@ -103,7 +106,7 @@ response = (vars, req, res) ->
       delete event.location.zip
 
   else
-    event = { outcome: 'error', reason: "Telesign error (#{res.status})" }
+    event = { outcome: 'error', reason: "TeleSign error (#{res.status})" }
 
   live: event
 

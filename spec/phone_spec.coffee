@@ -214,12 +214,12 @@ describe 'Phone Response', ->
       body: """
             {
             "outcome":"error",
-            "reason":"Telesign error (400)"
+            "reason":"TeleSign error (400)"
             }
             """
     expected =
       live:
         outcome: 'error'
-        reason: 'Telesign error (400)'
+        reason: 'TeleSign error (400)'
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
