@@ -11,8 +11,9 @@ baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
 
 request = (vars) ->
 
-  # Use the API key specified as an environment variable
+  # Use the API key and Customer ID specified as an environment variables
   apiKey = new Buffer(process.env.TELESIGN_ENCODED_API_KEY ? vars.telesign.encoded_apikey, 'base64')
+  customerId = process.env.TELESIGN_CUSTOMER_ID ? vars.telesign.customer_id
 
   # Generate the request signature
   date = moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
@@ -20,7 +21,7 @@ request = (vars) ->
   resource = "/v1/phoneid/live/1#{vars.lead.phone_1}"
   stringToSign = "GET\n\n\n#{headers}#{resource}"
   hash = crypto.createHmac('sha1', apiKey).update(stringToSign, 'utf-8').digest('base64')
-  signature = "TSA #{vars.telesign.customer_id}:#{hash}"
+  signature = "TSA #{customerId}:#{hash}"
 
   # Build the query string
   query = querystring.encode
@@ -35,7 +36,6 @@ request = (vars) ->
 
 request.variables = ->
   [
-    { name: 'telesign.customer_id', type: 'string', required: true, description: 'TeleSign Customer ID' },
     { name: 'lead.phone_1', type: 'string', required: true, description: 'Phone number' }
   ]
 

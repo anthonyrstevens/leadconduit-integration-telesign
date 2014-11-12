@@ -6,10 +6,11 @@ describe 'Phone Request', ->
   request = null
 
   beforeEach ->
+    process.env.TELESIGN_CUSTOMER_ID = 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
     process.env.TELESIGN_ENCODED_API_KEY = 'vW4G4ZmvGKby2dlowcdHxhkwy5RqwC+mfV9eVk3p'
     d = new Date('Thu, 10 Jul 2014 17:45:32 +0000')
     tk.freeze(d)
-    request = integration.request(lead: { phone_1: '7732658399' }, telesign: { customer_id: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE' })
+    request = integration.request(lead: { phone_1: '7732658399' })
     tk.reset(d)
 
   it 'should have url', ->
