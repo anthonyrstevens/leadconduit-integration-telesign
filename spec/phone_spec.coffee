@@ -32,7 +32,6 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "success"
-        reference_id: "0147216155F00D04E40012C600017C63"
         errors: []
         phone_type: "Fixed line"
         risk: "low"
@@ -51,24 +50,7 @@ describe 'Phone Response', ->
           county: "Cook"
           country_code: "US"
           time_zone: "America/Chicago"
-        numbering:
-          original:
-            complete_phone_number: "17732658399"
-            country_code: "1"
-            phone_number: "7732658399"
-          cleansing:
-            call:
-              country_code: "1"
-              phone_number: "7732658399"
-              cleansed_code: 100
-              min_length: 10
-              max_length: 10
-            sms:
-              country_code: "1"
-              phone_number: "7732658399"
-              cleansed_code: 100
-              min_length: 10
-              max_length: 10
+
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
@@ -86,7 +68,6 @@ describe 'Phone Response', ->
       live:
         outcome: "success"
         partial: true
-        reference_id: "01466D0F94F30E02E400124900017E76"
         errors: [
           code: -60001
           description: "PhoneID Live Data Not Found"
@@ -108,24 +89,7 @@ describe 'Phone Response', ->
           county: "Montezuma"
           country_code: "US"
           time_zone: "America/Denver"
-        numbering:
-          original:
-            complete_phone_number: "19707396346"
-            country_code: "1"
-            phone_number: "9707396346"
-          cleansing:
-            call:
-              country_code: "1"
-              phone_number: "9707396346"
-              cleansed_code: 100
-              min_length: 10
-              max_length: 10
-            sms:
-              country_code: "1"
-              phone_number: "9707396346"
-              cleansed_code: 100
-              min_length: 10
-              max_length: 10
+
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
@@ -143,7 +107,6 @@ describe 'Phone Response', ->
       live:
         outcome: "success"
         partial: true
-        reference_id: "01466D0F94F30E02E400124900017E76"
         errors: [
           code: -60001
           description: "PhoneID Live Data Not Found"
@@ -165,24 +128,7 @@ describe 'Phone Response', ->
           county: null
           country_code: "US"
           time_zone: "America/Denver"
-        numbering:
-          original:
-            complete_phone_number: "19707396346"
-            country_code: "1"
-            phone_number: "9707396346"
-          cleansing:
-            call:
-              country_code: "1"
-              phone_number: "9707396346"
-              cleansed_code: 100
-              min_length: 10
-              max_length: 10
-            sms:
-              country_code: "1"
-              phone_number: "9707396346"
-              cleansed_code: 100
-              min_length: 10
-              max_length: 10
+
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
