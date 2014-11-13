@@ -88,9 +88,9 @@ response = (vars, req, res) ->
         event.roaming_country_code = null
 
       if event.location.city
-        event.location.city = _s.titleize(event.location.city.toLowerCase())
+        event.location.city = _s.titleize(event.location.city)
       if event.location.county
-        event.location.county = _s.titleize(event.location.county.toLowerCase())
+        event.location.county = _s.titleize(event.location.county)
       event.location.country_code = event.location.country.iso2
       event.location.postal_code = event.location.zip
       event.location.latitude = event.location.coordinates.latitude
