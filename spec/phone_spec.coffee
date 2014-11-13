@@ -1,23 +1,31 @@
 assert = require('chai').assert
 integration = require('../src/phone')
-tk = require('timekeeper')
+time = require('timekeeper')
 
 
 describe 'Phone Request', ->
-  request = null
 
   beforeEach ->
+    time.freeze(new Date('Thu, 10 Jul 2014 17:45:32 +0000'))
     process.env.TELESIGN_CUSTOMER_ID = 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
     process.env.TELESIGN_ENCODED_API_KEY = 'vW4G4ZmvGKby2dlowcdHxhkwy5RqwC+mfV9eVk3p'
-    d = new Date('Thu, 10 Jul 2014 17:45:32 +0000')
-    tk.freeze(d)
-    request = integration.request(lead: { phone_1: '7732658399' })
-    tk.reset(d)
+    @vars = lead: { phone_1: '7732658399' }
+    @request = integration.request(@vars)
+
+  afterEach ->
+    time.reset()
 
   it 'should have url', ->
-    assert.equal request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&x-ts-date=Thu%2C%2010%20Jul%202014%2017%3A45%3A32%20%2B0000&x-ts-authorization=TSA%20AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%3AIqV%2FJHSu25rLtf4K4TxiD5Bt3RE%3D'
+    assert.equal @request.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&x-ts-date=Thu%2C%2010%20Jul%202014%2017%3A45%3A32%20%2B0000&x-ts-authorization=TSA%20AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%3AIqV%2FJHSu25rLtf4K4TxiD5Bt3RE%3D'
+
   it 'should be get', ->
-    assert.equal 'GET', request.method
+    assert.equal 'GET', @request.method
+
+  it 'should mask API key and customer ID on second invocation', ->
+    request2 = integration.request(@vars)
+    assert.equal request2.url, 'https://rest.telesign.com/v1/phoneid/live/17732658399?ucid=LEAD&x-ts-date=Thu%2C%2010%20Jul%202014%2017%3A45%3A32%20%2B0000&x-ts-authorization=TSA%20************************************%3AOATsQ9OCN%2F5AwWcsofH2G1HOsBw%3D'
+
+
 
 describe 'Phone Response', ->
   it 'should parse JSON body and return success on status 300', ->
