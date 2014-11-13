@@ -144,5 +144,6 @@ response.variables = ->
 #
 
 module.exports =
+  name: 'Phone Data Append'
   request: request,
   response: response
