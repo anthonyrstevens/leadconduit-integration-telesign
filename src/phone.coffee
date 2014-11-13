@@ -11,23 +11,30 @@ baseUrl = 'https://rest.telesign.com/v1/phoneid/live/'
 
 request = (vars) ->
 
-  # Use the API key and Customer ID specified as an environment variables
-  apiKey = new Buffer(process.env.TELESIGN_ENCODED_API_KEY ? vars.telesign.encoded_apikey, 'base64')
-  customerId = process.env.TELESIGN_CUSTOMER_ID ? vars.telesign.customer_id
+  # Use the API key and Customer ID specified as an environment variables.
+  # Assign the values to vars so that we can mask them. This works because the request function is
+  # called twice: first to generate the real request, and second to generate the masked request.
+  # On the second invocation, the vars properties are already assigned as masked strings.
+  vars.apiKey ?= process.env.TELESIGN_ENCODED_API_KEY ? vars.telesign.encoded_apikey
+  vars.customerId ?= process.env.TELESIGN_CUSTOMER_ID ? vars.telesign.customer_id
 
   # Generate the request signature
   date = moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
   headers = "x-ts-date:#{date}\n"
   resource = "/v1/phoneid/live/1#{vars.lead.phone_1}"
   stringToSign = "GET\n\n\n#{headers}#{resource}"
-  hash = crypto.createHmac('sha1', apiKey).update(stringToSign, 'utf-8').digest('base64')
-  signature = "TSA #{customerId}:#{hash}"
+  hash = crypto.createHmac('sha1', new Buffer(vars.apiKey, 'base64')).update(stringToSign, 'utf-8').digest('base64')
+  signature = "TSA #{vars.customerId}:#{hash}"
 
   # Build the query string
   query = querystring.encode
     'ucid': 'LEAD'
     'x-ts-date': date
     'x-ts-authorization': signature
+
+  # Mask the sensitive credentials. The masked values will be used on subsequent invocations.
+  vars.apiKey = Array(vars.apiKey.length + 1).join('*')
+  vars.customerId = Array(vars.customerId.length + 1).join('*')
 
   url: "#{baseUrl}1#{vars.lead.phone_1}?#{query}",
   method: 'GET',
