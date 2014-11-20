@@ -1,4 +1,5 @@
 assert = require('chai').assert
+fields = require('leadconduit-fields')
 integration = require('../src/phone')
 time = require('timekeeper')
 
@@ -258,6 +259,29 @@ describe 'Phone Response', ->
     assert.equal 'Active', response.live.subscriber_status
     assert.equal 'Unavailable', response.live.device_status
     assert.equal 'Unavailable', response.live.roaming
+
+
+describe 'Validation', ->
+
+  it 'should not allow null phone_1', ->
+    error = integration.validate(lead: { phone_1: null })
+    assert.equal error, 'lead.phone_1 must not be blank'
+
+  it 'should not allow undefined phone_1', ->
+    error = integration.validate(lead: {})
+    assert.equal error, 'lead.phone_1 must not be blank'
+
+  it 'should not allow invalid phone_1', ->
+    error = integration.validate(lead: fields.buildLeadVars(phone_1: 'donkey'))
+    assert.equal error, 'lead.phone_1 must be valid'
+
+  it 'should not error when phone_1 is valid', ->
+    error = integration.validate(lead: fields.buildLeadVars(phone_1: '5127891111'))
+    assert.isUndefined error
+
+  it 'should not error when phone_1 is missing the valid key', ->
+    error = integration.validate(lead: { phone_1: '5127891111' })
+    assert.isUndefined error
 
 
 

@@ -46,15 +46,15 @@ request.variables = ->
     { name: 'lead.phone_1', type: 'string', required: true, description: 'Phone number' }
   ]
 
-
+validate = (vars) ->
+  return 'lead.phone_1 must not be blank' unless vars.lead?.phone_1?
+  return 'lead.phone_1 must be valid' if vars.lead.phone_1?.valid? and vars.lead.phone_1.valid != true
 
 #
 # Response Function ------------------------------------------------------
 #
 
 response = (vars, req, res) ->
-
-
 
   if res.status == 200
     event = JSON.parse(res.body)
@@ -145,5 +145,6 @@ response.variables = ->
 
 module.exports =
   name: 'Phone Data Append'
-  request: request,
+  validate: validate
+  request: request
   response: response
