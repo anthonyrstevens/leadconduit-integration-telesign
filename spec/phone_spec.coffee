@@ -263,17 +263,21 @@ describe 'Phone Response', ->
 
 describe 'Validation', ->
 
-  it 'should not allow null phone_1', ->
+  it 'should not allow null phone', ->
     error = integration.validate(lead: { phone_1: null })
-    assert.equal error, 'lead.phone_1 must not be blank'
+    assert.equal error, 'phone must not be blank'
 
-  it 'should not allow undefined phone_1', ->
+  it 'should not allow undefined phone', ->
     error = integration.validate(lead: {})
-    assert.equal error, 'lead.phone_1 must not be blank'
+    assert.equal error, 'phone must not be blank'
 
-  it 'should not allow invalid phone_1', ->
+  it 'should not allow invalid phone', ->
     error = integration.validate(lead: fields.buildLeadVars(phone_1: 'donkey'))
-    assert.equal error, 'lead.phone_1 must be valid'
+    assert.equal error, 'phone must be valid'
+
+  it 'should not allow masked phone', ->
+    error = integration.validate(lead: fields.buildLeadVars(phone_1: '(512) ***-****'))
+    assert.equal error, 'phone must not be masked'
 
   it 'should not error when phone_1 is valid', ->
     error = integration.validate(lead: fields.buildLeadVars(phone_1: '5127891111'))
