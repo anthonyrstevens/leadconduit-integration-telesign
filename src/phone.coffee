@@ -47,8 +47,9 @@ request.variables = ->
   ]
 
 validate = (vars) ->
-  return 'lead.phone_1 must not be blank' unless vars.lead?.phone_1?
-  return 'lead.phone_1 must be valid' if vars.lead.phone_1?.valid? and vars.lead.phone_1.valid != true
+  return 'phone must not be blank' unless vars.lead?.phone_1?
+  return 'phone must be valid' if vars.lead.phone_1?.valid? and vars.lead.phone_1.valid != true
+  return 'phone must not be masked' if vars.lead.phone_1?.masked == true
 
 #
 # Response Function ------------------------------------------------------
