@@ -64,10 +64,11 @@ response = (vars, req, res) ->
       event.outcome = 'success'
       # success is the default status on 300, but we change this if the subscriber status is inactive
       # or if the phone type is 6, 7, 8, 9, 11, or 20
-      phone_code = event.phone_type.code
-      switch phone_code
-        when '6', '7', '8', '9', '11', '20' then event.outcome = 'failure'
-      unless event.live?.subscriber_status == 'ACTIVE' then event.outcome = 'failure'
+      phoneCode = event.phone_type.code
+      if event.live?.subscriber_status != 'ACTIVE' or parseBadPhoneTypes(phoneCode)
+        event.outcome = 'failure'
+
+
     else if event.status.code == 301
       #301 should have a partial flag
       event.outcome = 'failure'
@@ -157,3 +158,12 @@ module.exports =
   validate: validate
   request: request
   response: response
+
+#
+# Helpers ----------------------------------------------------------------
+#
+
+parseBadPhoneTypes = (phoneCode) ->
+  switch phoneCode
+    when '6' or '7' or '8' or '9' or '11' or '20' then true
+    else false
