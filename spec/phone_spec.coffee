@@ -29,7 +29,9 @@ describe 'Phone Request', ->
 
 
 describe 'Phone Response', ->
-  it 'should parse JSON body and return success on status 300', ->
+  # success is defined as a non-partial transaction with the subscriber status of 'Active'
+  # and with a phone_type_code not equal to 6, 7, 8, 9, 11, or 20
+  it 'should parse JSON body and return success when criteria matches', ->
     vars = {}
     req = {}
     res =
@@ -37,17 +39,18 @@ describe 'Phone Response', ->
       headers:
         'Content-Type': 'application/json'
       body: '
-        {"reference_id": "0147216155F00D04E40012C600017C63", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-07-10T17:45:33.140531Z", "code": 300, "description": "Transaction successfully completed"}, "errors": [], "phone_type": {"code": "1", "description": "FIXED_LINE"}, "live": {"subscriber_status": "ACTIVE", "device_status": "UNAVAILABLE", "roaming": "UNAVAILABLE", "roaming_country": null, "roaming_country_iso2": null}, "location": {"city": "CHICAGO", "state": "IL", "zip": "60611", "metro_code": "1600", "county": "COOK", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 41.87829, "longitude": -87.71248}, "time_zone": {"name": "America/Chicago", "utc_offset_min": "-6", "utc_offset_max": "-6"}}, "numbering": {"original": {"complete_phone_number": "17732658399", "country_code": "1", "phone_number": "7732658399"}, "cleansing": {"call": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "AT&T - PSTN"}}
+        {"reference_id": "0147216155F00D04E40012C600017C63", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-07-10T17:45:33.140531Z", "code": 300, "description": "Transaction successfully completed"}, "errors": [], "phone_type": {"code": "1", "description": "FIXED_LINE"}, "live": {"subscriber_status": "ACTIVE", "device_status": "REACHABLE", "roaming": "UNAVAILABLE", "roaming_country": null, "roaming_country_iso2": null}, "location": {"city": "CHICAGO", "state": "IL", "zip": "60611", "metro_code": "1600", "county": "COOK", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 41.87829, "longitude": -87.71248}, "time_zone": {"name": "America/Chicago", "utc_offset_min": "-6", "utc_offset_max": "-6"}}, "numbering": {"original": {"complete_phone_number": "17732658399", "country_code": "1", "phone_number": "7732658399"}, "cleansing": {"call": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "AT&T - PSTN"}}
       '
     expected =
       live:
         outcome: "success"
+        billable: true
         errors: []
         phone_type: "Fixed line"
         risk: "low"
         carrier: "AT&T - PSTN"
         subscriber_status: "Active"
-        device_status: "Unavailable"
+        device_status: "Reachable"
         roaming: "Unavailable"
         roaming_country_code: null
         location:
@@ -64,7 +67,79 @@ describe 'Phone Response', ->
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
 
-  it 'should parse JSON body and return partial success on status 301', ->
+  it 'should parse JSON body and return failure when phone_type is 6, 7, 8, 9, 11, or 20', ->
+    vars = {}
+    req = {}
+    res =
+      status: 200,
+      headers:
+        'Content-Type': 'application/json'
+      body: '
+        {"reference_id": "0147216155F00D04E40012C600017C63", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-07-10T17:45:33.140531Z", "code": 300, "description": "Transaction successfully completed"}, "errors": [], "phone_type": {"code": "6", "description": "PAGER"}, "live": {"subscriber_status": "ACTIVE", "device_status": "REACHABLE", "roaming": "UNAVAILABLE", "roaming_country": null, "roaming_country_iso2": null}, "location": {"city": "CHICAGO", "state": "IL", "zip": "60611", "metro_code": "1600", "county": "COOK", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 41.87829, "longitude": -87.71248}, "time_zone": {"name": "America/Chicago", "utc_offset_min": "-6", "utc_offset_max": "-6"}}, "numbering": {"original": {"complete_phone_number": "17732658399", "country_code": "1", "phone_number": "7732658399"}, "cleansing": {"call": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "AT&T - PSTN"}}
+      '
+    expected =
+      live:
+        outcome: "failure"
+        billable: true
+        errors: []
+        phone_type: "Pager"
+        risk: "high"
+        carrier: "AT&T - PSTN"
+        subscriber_status: "Active"
+        device_status: "Reachable"
+        roaming: "Unavailable"
+        roaming_country_code: null
+        location:
+          latitude: 41.87829
+          longitude: -87.71248
+          city: "Chicago"
+          state: "IL"
+          postal_code: "60611"
+          metro_code: "1600"
+          county: "Cook"
+          country_code: "US"
+          time_zone: "America/Chicago"
+
+    response = integration.response(vars, req, res)
+    assert.deepEqual response, expected
+
+  it 'should parse JSON body and return failure when subscriber status is Inactive', ->
+    vars = {}
+    req = {}
+    res =
+      status: 200,
+      headers:
+        'Content-Type': 'application/json'
+      body: '
+        {"reference_id": "0147216155F00D04E40012C600017C63", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-07-10T17:45:33.140531Z", "code": 300, "description": "Transaction successfully completed"}, "errors": [], "phone_type": {"code": "2", "description": "MOBILE"}, "live": {"subscriber_status": "INACTIVE", "device_status": "REACHABLE", "roaming": "UNAVAILABLE", "roaming_country": null, "roaming_country_iso2": null}, "location": {"city": "CHICAGO", "state": "IL", "zip": "60611", "metro_code": "1600", "county": "COOK", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 41.87829, "longitude": -87.71248}, "time_zone": {"name": "America/Chicago", "utc_offset_min": "-6", "utc_offset_max": "-6"}}, "numbering": {"original": {"complete_phone_number": "17732658399", "country_code": "1", "phone_number": "7732658399"}, "cleansing": {"call": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "7732658399", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "AT&T - PSTN"}}
+      '
+    expected =
+      live:
+        outcome: "failure"
+        billable: true
+        errors: []
+        phone_type: "Mobile"
+        risk: "medium-low"
+        carrier: "AT&T - PSTN"
+        subscriber_status: "Inactive"
+        device_status: "Reachable"
+        roaming: "Unavailable"
+        roaming_country_code: null
+        location:
+          latitude: 41.87829
+          longitude: -87.71248
+          city: "Chicago"
+          state: "IL"
+          postal_code: "60611"
+          metro_code: "1600"
+          county: "Cook"
+          country_code: "US"
+          time_zone: "America/Chicago"
+
+    response = integration.response(vars, req, res)
+    assert.deepEqual response, expected
+
+  it 'should parse JSON body and return failure + partial on status 301', ->
     vars = {}
     req = {}
     res =
@@ -76,7 +151,9 @@ describe 'Phone Response', ->
             '
     expected =
       live:
-        outcome: "success"
+        outcome: "failure"
+        billable: true
+        reason: "partial transaction"
         partial: true
         errors: [
           code: -60001
@@ -115,7 +192,9 @@ describe 'Phone Response', ->
                   '
     expected =
       live:
-        outcome: "success"
+        outcome: "failure"
+        reason: "partial transaction"
+        billable: true
         partial: true
         errors: [
           code: -60001
@@ -194,7 +273,9 @@ describe 'Phone Response', ->
                   '
     expected =
       live:
-        outcome: "success"
+        outcome: "failure"
+        reason: "partial transaction"
+        billable: true
         location:
           latitude: 37.34728
           longitude: -108.58756
@@ -222,7 +303,7 @@ describe 'Phone Response', ->
         "live", "status": {"updated_on": "2014-07-10T17:45:33.140531Z", "code": 300, 
         "description": "Transaction successfully completed"}, "errors": [], 
         "phone_type": {"code": "1", "description": "FIXED_LINE"}, 
-        "live": {"subscriber_status": "ACTIVE", "device_status": "UNAVAILABLE", 
+        "live": {"subscriber_status": "ACTIVE", "device_status": "REACHABLE",
         "roaming": "UNAVAILABLE", "roaming_country": null, "roaming_country_iso2": null}, 
         "location": {"city": "CHICAGO", "state": "IL", "zip": "60611", "metro_code": "1600", 
         "county": "COOK", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, 
@@ -241,7 +322,7 @@ describe 'Phone Response', ->
         risk: "low"
         carrier: "AT&T - PSTN"
         subscriber_status: "Active"
-        device_status: "Unavailable"
+        device_status: "Reachable"
         roaming: "Unavailable"
         roaming_country_code: null
         location:
@@ -257,7 +338,7 @@ describe 'Phone Response', ->
         
     response = integration.response(vars, req, res)
     assert.equal 'Active', response.live.subscriber_status
-    assert.equal 'Unavailable', response.live.device_status
+    assert.equal 'Reachable', response.live.device_status
     assert.equal 'Unavailable', response.live.roaming
 
 
