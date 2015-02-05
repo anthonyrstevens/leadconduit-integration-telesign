@@ -165,5 +165,5 @@ module.exports =
 
 isBadPhoneType = (phoneCode) ->
   switch phoneCode
-    when '6' or '7' or '8' or '9' or '11' or '20' then true
+    when '6', '7', '8', '9', '11', '20' then true
     else false
