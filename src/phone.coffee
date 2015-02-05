@@ -65,7 +65,7 @@ response = (vars, req, res) ->
       # success is the default status on 300, but we change this if the subscriber status is inactive
       # or if the phone type is 6, 7, 8, 9, 11, or 20
       phoneCode = event.phone_type.code
-      if event.live?.subscriber_status != 'ACTIVE' or parseBadPhoneTypes(phoneCode)
+      if event.live?.subscriber_status != 'ACTIVE' or isBadPhoneType(phoneCode)
         event.outcome = 'failure'
 
 
@@ -163,7 +163,7 @@ module.exports =
 # Helpers ----------------------------------------------------------------
 #
 
-parseBadPhoneTypes = (phoneCode) ->
+isBadPhoneType = (phoneCode) ->
   switch phoneCode
     when '6' or '7' or '8' or '9' or '11' or '20' then true
     else false
