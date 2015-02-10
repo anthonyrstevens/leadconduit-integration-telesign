@@ -59,13 +59,22 @@ response = (vars, req, res) ->
 
   if res.status == 200
     event = JSON.parse(res.body)
-    # should only be a success if the status.code is 300 or 301
     if event.status.code == 300
+      event.billable = true
       event.outcome = 'success'
+      # success is the default status on 300, but we change this if the subscriber status is inactive
+      # or if the phone type is 6, 7, 8, 9, 11, or 20
+      phoneCode = event.phone_type.code
+      if event.live?.subscriber_status != 'ACTIVE' or isBadPhoneType(phoneCode)
+        event.outcome = 'failure'
+
+
     else if event.status.code == 301
       #301 should have a partial flag
-      event.outcome = 'success'
+      event.outcome = 'failure'
+      event.reason = 'partial transaction'
       event.partial = true
+      event.billable = true
     else
       event.outcome = 'error'
       event.reason = "#{event.status.code} #{event.status.description}"
@@ -73,7 +82,7 @@ response = (vars, req, res) ->
       delete event.reason
       delete event.signature_string
 
-    if event.outcome == 'success'
+    if event.outcome != 'error'
       event.risk =
       switch event.phone_type.code
         when '1' then 'low'
@@ -149,3 +158,12 @@ module.exports =
   validate: validate
   request: request
   response: response
+
+#
+# Helpers ----------------------------------------------------------------
+#
+
+isBadPhoneType = (phoneCode) ->
+  switch phoneCode
+    when '6', '7', '8', '9', '11', '20' then true
+    else false
