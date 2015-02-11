@@ -130,6 +130,10 @@ response = (vars, req, res) ->
 
 response.variables = ->
   [
+    { name: 'outcome', type: 'string', description: 'Integration outcome (success, failure, or error)' },
+    { name: 'reason', type: 'string', description: 'If outcome is error, the error reason' },
+    { name: 'partial', type: 'boolean', 'description': 'If only partial data was returned' },
+    { name: 'billable', type: 'boolean', 'description': 'If the event is billable' },
     { name: 'live.risk', type: 'string', description: 'Risk rating for a given number.'}
     { name: 'live.phone_type', type: 'string', description: 'Description parameter of the object containing details about the phone type.' }
     { name: 'live.subscriber_status', type: 'string', description: 'A string indicating the current status of the subscriber’s phone number.' }
