@@ -130,10 +130,8 @@ response = (vars, req, res) ->
 
 response.variables = ->
   [
-    { name: 'outcome', type: 'string', description: 'Integration outcome (success, failure, or error)' },
-    { name: 'reason', type: 'string', description: 'If outcome is error, the error reason' },
-    { name: 'partial', type: 'boolean', 'description': 'If only partial data was returned' },
-    { name: 'billable', type: 'boolean', 'description': 'If the event is billable' },
+    { name: 'outcome', type: 'string', description: 'Integration outcome (success, failure, or error)' }
+    { name: 'reason', type: 'string', description: 'If outcome is error, the error reason' }
     { name: 'live.risk', type: 'string', description: 'Risk rating for a given number.'}
     { name: 'live.phone_type', type: 'string', description: 'Description parameter of the object containing details about the phone type.' }
     { name: 'live.subscriber_status', type: 'string', description: 'A string indicating the current status of the subscriber’s phone number.' }
@@ -150,6 +148,8 @@ response.variables = ->
     { name: 'live.location.longitude', type: 'string', description: 'A value indicating the number of degrees of longitude of the location associated with the phone number, expressed in eight decimal digits, with five decimal places.' }
     { name: 'live.location.time_zone', type: 'string', description: 'A string identifying the Time Zone Name (TZ) associated with the phone number (U.S. only).' }
     { name: 'live.errors', type: 'string', description: 'A JSON object that contains information about error conditions that might have resulted from the request, in an array of property-value pairs. If multiple errors occur, a pair of parameters is returned for each error. If no errors occur, then this object is empty.' }
+    { name: 'partial', type: 'boolean', 'description': 'If only partial data was returned' }
+    { name: 'billable', type: 'boolean', 'description': 'If the event is billable' }
   ]
 
 
