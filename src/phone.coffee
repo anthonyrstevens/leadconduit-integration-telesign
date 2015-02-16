@@ -65,14 +65,18 @@ response = (vars, req, res) ->
       # success is the default status on 300, but we change this if the subscriber status is inactive
       # or if the phone type is 6, 7, 8, 9, 11, or 20
       phoneCode = event.phone_type.code
-      if event.live?.subscriber_status != 'ACTIVE' or isBadPhoneType(phoneCode)
+      if event.live?.subscriber_status != 'ACTIVE'
         event.outcome = 'failure'
+        event.reason = 'Subscriber inactive'
+      if isBadPhoneType(phoneCode)
+        event.outcome = 'failure'
+        event.reason = 'Bad phone type'
 
 
     else if event.status.code == 301
       #301 should have a partial flag
       event.outcome = 'failure'
-      event.reason = 'partial transaction'
+      event.reason = 'Partial transaction'
       event.partial = true
       event.billable = true
     else

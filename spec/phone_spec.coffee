@@ -81,6 +81,7 @@ describe 'Phone Response', ->
       live:
         outcome: "failure"
         billable: true
+        reason: 'Bad phone type'
         errors: []
         phone_type: "Pager"
         risk: "high"
@@ -116,6 +117,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "failure"
+        reason: 'Subscriber inactive'
         billable: true
         errors: []
         phone_type: "Mobile"
@@ -153,7 +155,7 @@ describe 'Phone Response', ->
       live:
         outcome: "failure"
         billable: true
-        reason: "partial transaction"
+        reason: "Partial transaction"
         partial: true
         errors: [
           code: -60001
@@ -193,7 +195,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "failure"
-        reason: "partial transaction"
+        reason: "Partial transaction"
         billable: true
         partial: true
         errors: [
@@ -274,7 +276,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "failure"
-        reason: "partial transaction"
+        reason: "Partial transaction"
         billable: true
         location:
           latitude: 37.34728
