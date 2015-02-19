@@ -96,7 +96,7 @@ response = (vars, req, res) ->
         else 'unknown'
 
       event.carrier = event.carrier.name
-      event.phone_type = _s.humanize(event.phone_type.description)
+      event.phone_type = parsePhoneType(event.phone_type.code)
       if event.live
         event.subscriber_status = _s.titleize(event.live.subscriber_status)
         event.device_status = _s.titleize(event.live.device_status)
@@ -175,3 +175,18 @@ isBadPhoneType = (phoneCode) ->
   switch phoneCode
     when '6', '7', '8', '9', '11', '20' then true
     else false
+
+parsePhoneType = (phoneCode) ->
+  switch phoneCode
+    when '1' then 'fixed' #Fixed Line
+    when '2' then 'mobile' #Mobile
+    when '3' then 'prepaid' #PrePaid Mobile
+    when '4' then 'tollfree' #Toll-Free
+    when '5' then 'voip' #Non-Fixed VOIP
+    when '6' then 'pager' #Pager
+    when '7' then 'payphone' #Payphone
+    when '8' then 'invalid' #Invalid
+    when '9' then 'restricted' #Restricted Number
+    when '10' then 'personal' #Personal
+    when '11' then 'voicemail' #Voicemail
+    when '20' then 'other' #Other

@@ -46,7 +46,7 @@ describe 'Phone Response', ->
         outcome: "success"
         billable: true
         errors: []
-        phone_type: "Fixed line"
+        phone_type: "fixed"
         risk: "low"
         carrier: "AT&T - PSTN"
         subscriber_status: "Active"
@@ -83,7 +83,7 @@ describe 'Phone Response', ->
         billable: true
         reason: 'Bad phone type'
         errors: []
-        phone_type: "Pager"
+        phone_type: "pager"
         risk: "high"
         carrier: "AT&T - PSTN"
         subscriber_status: "Active"
@@ -120,7 +120,7 @@ describe 'Phone Response', ->
         reason: 'Subscriber inactive'
         billable: true
         errors: []
-        phone_type: "Mobile"
+        phone_type: "mobile"
         risk: "medium-low"
         carrier: "AT&T - PSTN"
         subscriber_status: "Inactive"
@@ -149,7 +149,7 @@ describe 'Phone Response', ->
       headers:
         'Content-Type': 'application/json'
       body: '
-            {"reference_id": "01466D0F94F30E02E400124900017E76", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-06-05T17:24:36.587351Z", "code": 301, "description": "Transaction partially completed"}, "errors": [{"code": -60001, "description": "PhoneID Live Data Not Found"}], "phone_type": {"code": "2", "description": "MOBILE"}, "live": null, "location": {"city": "Cortez", "state": "CO", "zip": "81321", "metro_code": "", "county": "Montezuma", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 37.34728, "longitude": -108.58756}, "time_zone": {"name": "America/Denver", "utc_offset_min": "-7", "utc_offset_max": "-7"}}, "numbering": {"original": {"complete_phone_number": "19707396346", "country_code": "1", "phone_number": "9707396346"}, "cleansing": {"call": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "Verizon Wireless"}}
+            {"reference_id": "01466D0F94F30E02E400124900017E76", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-06-05T17:24:36.587351Z", "code": 301, "description": "Transaction partially completed"}, "errors": [{"code": -60001, "description": "PhoneID Live Data Not Found"}], "phone_type": {"code": "3", "description": "PrePaid Mobile"}, "live": null, "location": {"city": "Cortez", "state": "CO", "zip": "81321", "metro_code": "", "county": "Montezuma", "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 37.34728, "longitude": -108.58756}, "time_zone": {"name": "America/Denver", "utc_offset_min": "-7", "utc_offset_max": "-7"}}, "numbering": {"original": {"complete_phone_number": "19707396346", "country_code": "1", "phone_number": "9707396346"}, "cleansing": {"call": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "Verizon Wireless"}}
             '
     expected =
       live:
@@ -161,8 +161,8 @@ describe 'Phone Response', ->
           code: -60001
           description: "PhoneID Live Data Not Found"
         ]
-        phone_type: "Mobile"
-        risk: "medium-low"
+        phone_type: "prepaid"
+        risk: "medium-high"
         carrier: "Verizon Wireless"
         subscriber_status: null
         device_status: null
@@ -190,7 +190,7 @@ describe 'Phone Response', ->
       headers:
         'Content-Type': 'application/json'
       body: '
-                  {"reference_id": "01466D0F94F30E02E400124900017E76", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-06-05T17:24:36.587351Z", "code": 301, "description": "Transaction partially completed"}, "errors": [{"code": -60001, "description": "PhoneID Live Data Not Found"}], "phone_type": {"code": "2", "description": "MOBILE"}, "live": null, "location": {"city": null, "state": null, "zip": null, "metro_code": null, "county": null, "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 37.34728, "longitude": -108.58756}, "time_zone": {"name": "America/Denver", "utc_offset_min": "-7", "utc_offset_max": "-7"}}, "numbering": {"original": {"complete_phone_number": "19707396346", "country_code": "1", "phone_number": "9707396346"}, "cleansing": {"call": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "Verizon Wireless"}}
+                  {"reference_id": "01466D0F94F30E02E400124900017E76", "resource_uri": null, "sub_resource": "live", "status": {"updated_on": "2014-06-05T17:24:36.587351Z", "code": 301, "description": "Transaction partially completed"}, "errors": [{"code": -60001, "description": "PhoneID Live Data Not Found"}], "phone_type": {"code": "9", "description": "Restricted Number"}, "live": null, "location": {"city": null, "state": null, "zip": null, "metro_code": null, "county": null, "country": {"name": "United States", "iso2": "US", "iso3": "USA"}, "coordinates": {"latitude": 37.34728, "longitude": -108.58756}, "time_zone": {"name": "America/Denver", "utc_offset_min": "-7", "utc_offset_max": "-7"}}, "numbering": {"original": {"complete_phone_number": "19707396346", "country_code": "1", "phone_number": "9707396346"}, "cleansing": {"call": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}, "sms": {"country_code": "1", "phone_number": "9707396346", "cleansed_code": 100, "min_length": 10, "max_length": 10}}}, "carrier": {"name": "Verizon Wireless"}}
                   '
     expected =
       live:
@@ -202,8 +202,8 @@ describe 'Phone Response', ->
           code: -60001
           description: "PhoneID Live Data Not Found"
         ]
-        phone_type: "Mobile"
-        risk: "medium-low"
+        phone_type: "restricted"
+        risk: "high"
         carrier: "Verizon Wireless"
         subscriber_status: null
         device_status: null
@@ -320,7 +320,7 @@ describe 'Phone Response', ->
       live:
         outcome: "success"
         errors: []
-        phone_type: "Fixed line"
+        phone_type: "fixed"
         risk: "low"
         carrier: "AT&T - PSTN"
         subscriber_status: "Active"
