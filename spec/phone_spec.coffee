@@ -49,9 +49,9 @@ describe 'Phone Response', ->
         phone_type: "fixed"
         risk: "low"
         carrier: "AT&T - PSTN"
-        subscriber_status: "Active"
-        device_status: "Reachable"
-        roaming: "Unavailable"
+        subscriber_status: "active"
+        device_status: "reachable"
+        roaming: "unavailable"
         roaming_country_code: null
         location:
           latitude: 41.87829
@@ -86,9 +86,9 @@ describe 'Phone Response', ->
         phone_type: "pager"
         risk: "high"
         carrier: "AT&T - PSTN"
-        subscriber_status: "Active"
-        device_status: "Reachable"
-        roaming: "Unavailable"
+        subscriber_status: "active"
+        device_status: "reachable"
+        roaming: "unavailable"
         roaming_country_code: null
         location:
           latitude: 41.87829
@@ -123,9 +123,9 @@ describe 'Phone Response', ->
         phone_type: "mobile"
         risk: "medium-low"
         carrier: "AT&T - PSTN"
-        subscriber_status: "Inactive"
-        device_status: "Reachable"
-        roaming: "Unavailable"
+        subscriber_status: "inactive"
+        device_status: "reachable"
+        roaming: "unavailable"
         roaming_country_code: null
         location:
           latitude: 41.87829
@@ -293,7 +293,7 @@ describe 'Phone Response', ->
     assert.equal 'Sioux Falls', response.live.location.city
     assert.equal 'Fall River', response.live.location.county
 
-  it 'should correctly capitalize subscriber_status, device_status, roaming', ->
+  it 'should correctly downcase subscriber_status, device_status, roaming', ->
     vars = {}
     req = {}
     res =
@@ -323,9 +323,9 @@ describe 'Phone Response', ->
         phone_type: "fixed"
         risk: "low"
         carrier: "AT&T - PSTN"
-        subscriber_status: "Active"
-        device_status: "Reachable"
-        roaming: "Unavailable"
+        subscriber_status: "active"
+        device_status: "reachable"
+        roaming: "unavailable"
         roaming_country_code: null
         location:
           latitude: 41.87829
@@ -339,9 +339,9 @@ describe 'Phone Response', ->
           time_zone: "America/Chicago"
         
     response = integration.response(vars, req, res)
-    assert.equal 'Active', response.live.subscriber_status
-    assert.equal 'Reachable', response.live.device_status
-    assert.equal 'Unavailable', response.live.roaming
+    assert.equal 'active', response.live.subscriber_status
+    assert.equal 'reachable', response.live.device_status
+    assert.equal 'unavailable', response.live.roaming
 
 
 describe 'Validation', ->

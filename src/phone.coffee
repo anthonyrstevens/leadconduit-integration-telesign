@@ -98,9 +98,9 @@ response = (vars, req, res) ->
       event.carrier = event.carrier.name
       event.phone_type = parsePhoneType(event.phone_type.code)
       if event.live
-        event.subscriber_status = _s.titleize(event.live.subscriber_status)
-        event.device_status = _s.titleize(event.live.device_status)
-        event.roaming = _s.titleize(event.live.roaming)
+        event.subscriber_status = event.live.subscriber_status.toLowerCase()
+        event.device_status = event.live.device_status.toLowerCase()
+        event.roaming = event.live.roaming.toLowerCase()
         event.roaming_country_code = event.live.roaming_country_iso2
       else
         event.subscriber_status = null
