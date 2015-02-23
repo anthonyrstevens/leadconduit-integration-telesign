@@ -2,7 +2,7 @@
   "name": "leadconduit-telesign",
   "description": "LeadConduit integration with Telesign",
   "author": "Zalary Young <zalary@activeprospect.com>",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "main": "index.js",
   "licenses": [
     {
