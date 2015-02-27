@@ -153,9 +153,8 @@ describe 'Phone Response', ->
             '
     expected =
       live:
-        outcome: "failure"
+        outcome: "success"
         billable: true
-        reason: "Partial transaction"
         partial: true
         errors: [
           code: -60001
@@ -194,8 +193,7 @@ describe 'Phone Response', ->
                   '
     expected =
       live:
-        outcome: "failure"
-        reason: "Partial transaction"
+        outcome: "success"
         billable: true
         partial: true
         errors: [
@@ -275,8 +273,7 @@ describe 'Phone Response', ->
                   '
     expected =
       live:
-        outcome: "failure"
-        reason: "Partial transaction"
+        outcome: "success"
         billable: true
         location:
           latitude: 37.34728

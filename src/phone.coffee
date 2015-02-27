@@ -75,8 +75,7 @@ response = (vars, req, res) ->
 
     else if event.status.code == 301
       #301 should have a partial flag
-      event.outcome = 'failure'
-      event.reason = 'Partial transaction'
+      event.outcome = 'success'
       event.partial = true
       event.billable = true
     else
