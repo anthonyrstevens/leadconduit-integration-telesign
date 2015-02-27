@@ -59,25 +59,21 @@ response = (vars, req, res) ->
 
   if res.status == 200
     event = JSON.parse(res.body)
-    if event.status.code == 300
+    if event.status.code == 300 or event.status.code == 301
       event.billable = true
       event.outcome = 'success'
       # success is the default status on 300, but we change this if the subscriber status is inactive
       # or if the phone type is 6, 7, 8, 9, 11, or 20
       phoneCode = event.phone_type.code
-      if event.live?.subscriber_status != 'ACTIVE'
+      if event.live && event.live?.subscriber_status != 'ACTIVE'
         event.outcome = 'failure'
         event.reason = 'Subscriber inactive'
       if isBadPhoneType(phoneCode)
         event.outcome = 'failure'
         event.reason = 'Bad phone type'
-
-
-    else if event.status.code == 301
-      #301 should have a partial flag
-      event.outcome = 'success'
-      event.partial = true
-      event.billable = true
+      if event.status.code == 301
+        #301 should have a partial flag
+        event.partial = true
     else
       event.outcome = 'error'
       event.reason = "#{event.status.code} #{event.status.description}"

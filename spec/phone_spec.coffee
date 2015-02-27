@@ -193,7 +193,8 @@ describe 'Phone Response', ->
                   '
     expected =
       live:
-        outcome: "success"
+        outcome: "failure"
+        reason: "Bad phone type"
         billable: true
         partial: true
         errors: [
