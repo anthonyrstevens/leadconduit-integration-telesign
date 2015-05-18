@@ -60,7 +60,7 @@ response = (vars, req, res) ->
   if res.status == 200
     event = JSON.parse(res.body)
     if event.status.code == 300 or event.status.code == 301
-      event.billable = true
+      event.billable = 1
       event.outcome = 'success'
       # success is the default status on 300, but we change this if the subscriber status is inactive
       # or if the phone type is 6, 7, 8, 9, 11, or 20
@@ -76,6 +76,7 @@ response = (vars, req, res) ->
         event.partial = true
     else
       event.outcome = 'error'
+      event.billable = 0
       event.reason = "#{event.status.code} #{event.status.description}"
       delete event.status
       delete event.reason
@@ -123,7 +124,7 @@ response = (vars, req, res) ->
       delete event.location.zip
 
   else
-    event = { outcome: 'error', reason: "TeleSign error (#{res.status})" }
+    event = { outcome: 'error', reason: "TeleSign error (#{res.status})", billable: 0 }
 
   live: event
 
@@ -148,7 +149,7 @@ response.variables = ->
     { name: 'live.location.time_zone', type: 'string', description: 'A string identifying the Time Zone Name (TZ) associated with the phone number (U.S. only).' }
     { name: 'live.errors', type: 'string', description: 'A JSON object that contains information about error conditions that might have resulted from the request, in an array of property-value pairs. If multiple errors occur, a pair of parameters is returned for each error. If no errors occur, then this object is empty.' }
     { name: 'live.partial', type: 'boolean', 'description': 'If only partial data was returned' }
-    { name: 'live.billable', type: 'boolean', 'description': 'If the event is billable' }
+    { name: 'live.billable', type: 'number', 'description': 'If the event is billable, billable count else 0' }
   ]
 
 
