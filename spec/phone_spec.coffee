@@ -44,7 +44,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "success"
-        billable: true
+        billable: 1
         errors: []
         phone_type: "fixed"
         risk: "low"
@@ -80,7 +80,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "failure"
-        billable: true
+        billable: 1
         reason: 'Bad phone type'
         errors: []
         phone_type: "pager"
@@ -118,7 +118,7 @@ describe 'Phone Response', ->
       live:
         outcome: "failure"
         reason: 'Subscriber inactive'
-        billable: true
+        billable: 1
         errors: []
         phone_type: "mobile"
         risk: "medium-low"
@@ -154,7 +154,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "success"
-        billable: true
+        billable: 1
         partial: true
         errors: [
           code: -60001
@@ -195,7 +195,7 @@ describe 'Phone Response', ->
       live:
         outcome: "failure"
         reason: "Bad phone type"
-        billable: true
+        billable: 1
         partial: true
         errors: [
           code: -60001
@@ -235,6 +235,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "error"
+        billable: 0
         errors: [
           code: -30006
           description: "Invalid Signature."
@@ -258,6 +259,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: 'error'
+        billable: 0
         reason: 'TeleSign error (400)'
     response = integration.response(vars, req, res)
     assert.deepEqual response, expected
@@ -275,7 +277,7 @@ describe 'Phone Response', ->
     expected =
       live:
         outcome: "success"
-        billable: true
+        billable: 1
         location:
           latitude: 37.34728
           longitude: -108.58756
